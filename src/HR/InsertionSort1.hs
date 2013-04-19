@@ -83,16 +83,13 @@ insertionSortTrace s0 = move (len - 2) s0
   where
     len = Seq.length s0
     val = Seq.index s0 (len - 1)
+    dbg s = tell [renderSeq s] >> return s
     move i s
-      | ival > val = do
-          let s' = Seq.update (i + 1) ival s
-          move (i - 1) s' <* dbg s'
-      | otherwise  = do
-          let s' = Seq.update (i + 1) val s
-          return s' <* dbg s'
+      | i < 0      = dbg (Seq.update 0       val  s)
+      | val < ival = dbg (Seq.update (i + 1) ival s) >>= move (i - 1)
+      | otherwise  = dbg (Seq.update (i + 1) val  s)
       where
         ival = Seq.index s i
-        dbg = tell . pure . renderSeq
 
 renderSeq :: Seq Int -> String
 renderSeq = concat . intersperse " " . toList . fmap show
@@ -102,6 +99,6 @@ main = do
     len <- read <$> getLine
     s <- Seq.fromList . fmap read . take len . words <$> getLine
     let (_,msgs) = runWriter . insertionSortTrace $ s
-    mapM_ putStrLn $ reverse msgs
+    mapM_ putStrLn msgs
 
 
