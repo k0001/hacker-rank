@@ -4,12 +4,14 @@ import System.Environment (getArgs, getProgName)
 import qualified HR.SavePrincess
 import qualified HR.SavePrincess2
 import qualified HR.InsertionSort1
+import qualified HR.InsertionSort2
 
 challenges :: [(String, IO ())]
 challenges =
   [ ("saveprincess"   , HR.SavePrincess.main)
   , ("saveprincess2"  , HR.SavePrincess2.main)
   , ("insertionsort1" , HR.InsertionSort1.main)
+  , ("insertionsort2" , HR.InsertionSort2.main)
   ]
 
 usageMsg :: IO String
